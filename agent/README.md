@@ -29,3 +29,17 @@ python3 agent/inject-cookies.py --port 9224 --dry-run
 4. Run `inject-cookies.py`.
 
 Do not commit `cookies.json`. Treat it like session credentials.
+
+## Final instruction: skip Google, Meta and X
+
+Do not use these cookies to sign in to a Google, Meta or X property. Gmail, Drive, Search Console, Google Ads, YouTube, Facebook, Instagram, WhatsApp, Meta Ads Manager, x.com.
+
+A cloud browser arriving on those accounts is what their risk systems are built to catch. The cost is a security warning, a locked account or a disabled ad account, not a failed task. Their own MCP servers, plugins and official APIs connect the way the account expects, and they do the job better.
+
+The safest way to hold that line is to inject an allowlist instead of everything:
+
+```bash
+python3 agent/inject-cookies.py --cookies cookies.json --domains canva.com,stripe.com,yourcrm.com,yourapp.com
+```
+
+Everything outside the big three is fair game, and it is most of what you actually work in: Canva, the CRM, the help desk, Stripe, the invoicing tool, the product's own admin dashboard, the project tracker.
