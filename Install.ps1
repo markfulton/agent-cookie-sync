@@ -10,6 +10,7 @@ $hostDir = Join-Path $root 'native-host'
 New-Item -ItemType Directory -Force -Path $ext, $hostDir | Out-Null
 Copy-Item -Force (Join-Path $here 'extension\*') $ext
 Copy-Item -Force (Join-Path $here 'native-host\cookie_sync_host.py') $hostDir
+Copy-Item -Force (Join-Path $here 'Request-Sync.ps1') $root -ErrorAction SilentlyContinue
 
 $python = $null
 foreach ($name in @('python', 'python3', 'py')) {
@@ -36,3 +37,4 @@ Write-Host '  3. Load unpacked, and pick this folder:'
 Write-Host ('       ' + $ext)
 Write-Host '  4. Copy the extension ID shown on its card, then run:'
 Write-Host ('       powershell -ExecutionPolicy Bypass -File "' + (Join-Path $here 'Register-NativeHost.ps1') + '" -ExtensionId <ID>')
+Write-Host ('On-demand later: powershell -File "' + (Join-Path $root 'Request-Sync.ps1') + '"')

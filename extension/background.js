@@ -2,9 +2,12 @@
 // the native host on this computer, which writes it to a local folder.
 // Nothing leaves this machine from here. The badge on the icon shows the
 // count from the last export, or ! when the host could not be reached.
+// On-demand: drop sync-request.flag in the sync folder; the extension
+// polls about once a minute and exports when that flag appears.
 
 const NATIVE_HOST = "com.agentopsclub.cookiesync";
 const ALARM = "agent-cookie-sync";
+const POLL_ALARM = "agent-cookie-sync-poll";
 const EVERY_MINUTES = 15;
 
 async function exportCookies(reason) {
@@ -45,21 +48,47 @@ async function exportCookies(reason) {
   }
 }
 
+async function pollRequest() {
+  try {
+    const response = await chrome.runtime.sendNativeMessage(NATIVE_HOST, { cmd: "poll_request" });
+    if (response && response.export) {
+      await exportCookies("request");
+    }
+  } catch (_) {}
+}
+
 chrome.runtime.onInstalled.addListener(async () => {
   await chrome.alarms.create(ALARM, { periodInMinutes: EVERY_MINUTES });
+  await chrome.alarms.create(POLL_ALARM, { periodInMinutes: 1 });
   try { await exportCookies("installed"); } catch (_) {}
 });
 
 chrome.runtime.onStartup.addListener(async () => {
-  const existing = await chrome.alarms.get(ALARM);
-  if (!existing) await chrome.alarms.create(ALARM, { periodInMinutes: EVERY_MINUTES });
+  if (!(await chrome.alarms.get(ALARM))) {
+    await chrome.alarms.create(ALARM, { periodInMinutes: EVERY_MINUTES });
+  }
+  if (!(await chrome.alarms.get(POLL_ALARM))) {
+    await chrome.alarms.create(POLL_ALARM, { periodInMinutes: 1 });
+  }
 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
-  if (alarm.name !== ALARM) return;
-  try { await exportCookies("alarm"); } catch (_) {}
+  if (alarm.name === ALARM) {
+    try { await exportCookies("alarm"); } catch (_) {}
+  } else if (alarm.name === POLL_ALARM) {
+    await pollRequest();
+  }
 });
 
 chrome.action.onClicked.addListener(async () => {
   try { await exportCookies("click"); } catch (_) {}
+});
+
+chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
+  if (msg && msg.type === "export-now") {
+    exportCookies("message")
+      .then((r) => sendResponse({ ok: true, response: r }))
+      .catch((e) => sendResponse({ ok: false, error: String(e) }));
+    return true;
+  }
 });

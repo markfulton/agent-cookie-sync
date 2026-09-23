@@ -1,10 +1,17 @@
 {
   "manifest_version": 3,
   "name": "Agent Cookie Sync",
-  "version": "1.0.0",
-  "description": "Exports the cookies of the sites you are signed into to a folder on this computer, every 15 minutes, so your own agent can use them. Local only.",
-  "permissions": ["cookies", "alarms", "nativeMessaging", "storage"],
-  "host_permissions": ["<all_urls>"],
+  "version": "1.1.1",
+  "description": "Exports decrypted Chrome cookies for your agent. Local only. Supports on-demand sync-request.flag.",
+  "permissions": [
+    "cookies",
+    "alarms",
+    "nativeMessaging",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"

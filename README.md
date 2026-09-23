@@ -32,7 +32,7 @@
 
 Grok Bot and Muse browse from a cloud computer of their own. Fresh browser, no sessions, signed out of everything you use, so the first piece of real work hits a login wall.
 
-This is the bridge. A Chrome extension reads the cookies of the sites you are signed into and hands them to a native host, which writes them to a folder on your own machine, every 15 minutes. Your bot syncs that folder and uses them in its browser. Setup is one prompt to your bot, or four steps by hand.
+This is the bridge. A Chrome extension reads the cookies of the sites you are signed into and hands them to a native host, which writes them to a folder on your own machine, every 15 minutes (or on demand). Your bot syncs that folder, then injects the cookies into its own Chrome over DevTools Protocol so the window is actually signed in. Folder sync alone is not enough. Setup is one prompt to your bot, or a few steps by hand.
 
 No password ever moves. Chrome holds a session cookie for every site you are signed into, and the cookie is what proves you are you. Your passwords stay in your password manager.
 
@@ -47,7 +47,7 @@ You need Chrome and Python 3.
 Download this repository (**Code**, **Download ZIP**) or clone it, extract it somewhere you will find again, then paste this to Grok Bot or Muse:
 
 ```
-Please install and set up the Agent Cookie Sync Chrome extension and native host I just extracted to my computer's Downloads folder. I'll give you the extension id, tell me where to find it. Then set a recurring sync every 15 minutes from the cookie export folder to your computer, and use those cookies in your browser.
+Please install and set up the Agent Cookie Sync Chrome extension and native host I just extracted to my computer's Downloads folder. I'll give you the extension id, tell me where to find it. Then set a recurring sync every 15 minutes from the cookie export folder to your computer, inject those cookies into your Chrome via CDP after each pull (see agent/inject-cookies.py), and support on-demand sync with Request-Sync.ps1 / request-sync.sh.
 ```
 
 That one prompt does the whole setup, the recurring sync included. It stops once, to walk you through loading the extension in Chrome and to take the extension ID from you, because that part only you can do.
@@ -80,7 +80,7 @@ Reload the extension on `chrome://extensions`, then click its toolbar icon once.
 
 Last, tell your bot once:
 
-> Set a recurring sync every 15 minutes from that export folder to your computer, and use those cookies in your browser.
+> Set a recurring sync every 15 minutes from that export folder to your computer, inject the cookies into your Chrome with agent/inject-cookies.py after each pull, and wire on-demand sync via Request-Sync.ps1 / request-sync.sh.
 
 The [setup page](https://club.reinventing.ai/cookie-sync?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=guide) has the same four steps with every click path, free and with no account.
 
@@ -96,12 +96,16 @@ The extension and the host never touch the network. The sync to your bot's compu
 ## What is in here
 
 ```
-extension/manifest.json        Manifest V3, cookies + alarms + nativeMessaging
-extension/background.js        exports every 15 minutes and on every click
-native-host/cookie_sync_host.py  writes the file, never prints a cookie value
-Install.ps1                    Windows: copies the files, writes the launcher
-Register-NativeHost.ps1        Windows: registers the host for your extension ID
-register-mac-linux.sh          macOS and Linux: both steps in one run
+extension/manifest.json          Manifest V3, cookies + alarms + nativeMessaging
+extension/background.js          exports every 15 minutes, on click, and on demand
+native-host/cookie_sync_host.py  writes the file; also answers poll_request
+Request-Sync.ps1                 Windows: drop sync-request.flag for a fresh export
+request-sync.sh                  macOS/Linux: same on-demand flag
+agent/inject-cookies.py          agent computer: inject cookies.json into Chrome via CDP
+agent/README.md                  how the bot pulls, injects, and requests a fresh export
+Install.ps1                      Windows: copies the files, writes the launcher
+Register-NativeHost.ps1          Windows: registers the host for your extension ID
+register-mac-linux.sh            macOS and Linux: both steps in one run
 ```
 
 <table>
@@ -122,6 +126,20 @@ register-mac-linux.sh          macOS and Linux: both steps in one run
 </td></tr>
 </table>
 
+## Stay logged in on the bot
+
+After your bot copies `cookies.json`, it must inject into its own Chrome. Use `agent/inject-cookies.py` against a browser that has `--remote-debugging-port` (Grok Bot and Muse already do). The script uses Chrome DevTools `Storage.setCookies` and never prints cookie values.
+
+### On-demand sync
+
+Need a fresher session than the 15-minute alarm?
+
+1. Run `Request-Sync.ps1` on Windows, or `request-sync.sh` on macOS/Linux.
+2. Within about a minute the extension exports and clears `sync-request.flag`.
+3. Your bot pulls the folder and runs `inject-cookies.py` again.
+
+You can also click the extension icon anytime for an immediate export.
+
 ## FAQ
 
 **Does this send my cookies anywhere?** Not from here. The extension and the host are local only. The sync to your bot is a separate job it runs at your say so.
@@ -129,6 +147,8 @@ register-mac-linux.sh          macOS and Linux: both steps in one run
 **Does it work with anything other than Grok Bot and Muse?** Any agent that browses from a machine that is not yours and can sync a folder. Those two are what it is tested against.
 
 **Do I need this for an agent on my own PC?** No. It already has your browser.
+
+**Why is my bot still on a login page after sync?** Syncing the folder is not enough. The bot has to inject `cookies.json` into its Chrome (see `agent/inject-cookies.py`). Then reload the site.
 
 **What happens when I sign out of a site?** The next export carries no session for it and your bot loses access at the next sync.
 

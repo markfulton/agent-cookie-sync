@@ -47,6 +47,18 @@ def main() -> int:
     if not msg:
         return 0
     out_dir = sync_dir()
+    if msg.get("cmd") == "poll_request":
+        os.makedirs(out_dir, exist_ok=True)
+        flag = os.path.join(out_dir, "sync-request.flag")
+        if os.path.exists(flag):
+            try:
+                os.remove(flag)
+            except OSError:
+                pass
+            send_message({"ok": True, "export": True})
+        else:
+            send_message({"ok": True, "export": False})
+        return 0
     os.makedirs(out_dir, exist_ok=True)
     cookies = msg.get("cookies") or []
     cookies_path = os.path.join(out_dir, "cookies.json")
