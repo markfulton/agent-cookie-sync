@@ -47,7 +47,7 @@ You need Chrome and Python 3.
 Download this repository (**Code**, **Download ZIP**) or clone it, extract it somewhere you will find again, then paste this to Grok Bot or Muse:
 
 ```
-Please install and set up the Agent Cookie Sync Chrome extension and native host I just extracted to my computer's Downloads folder. I'll give you the extension id, tell me where to find it. Then set a recurring sync every 15 minutes from the cookie export folder to your computer, inject those cookies into your Chrome via CDP after each pull (see agent/inject-cookies.py), and support on-demand sync with Request-Sync.ps1 / request-sync.sh.
+Please install and set up the Agent Cookie Sync Chrome extension and native host I just extracted to my computer's Downloads folder. I'll give you the extension id, tell me where to find it. Then set a recurring sync every 15 minutes from the cookie export folder to your computer, inject those cookies into your Chrome via CDP after each pull (see agent/inject-cookies.py), and support on-demand sync with Request-Sync.ps1 / request-sync.sh. Do not use these cookies to sign in to any Google, Meta or X account, as that can trigger a security warning on my account; use your own MCP or plugin for those.
 ```
 
 That one prompt does the whole setup, the recurring sync included. It stops once, to walk you through loading the extension in Chrome and to take the extension ID from you, because that part only you can do.
@@ -90,8 +90,19 @@ The [setup page](https://club.reinventing.ai/cookie-sync?utm_source=github&utm_m
 - **Every bot on the account shares every login.** They share one cloud computer, so a login one bot gets, they all get.
 - **Sync from a work profile.** Use a Chrome profile holding only the accounts you would hand to an employee. Not your personal one.
 - **Revoking is three moves.** Remove the extension, delete the sync folder, change the password on anything you want signed out.
+- **Leave Google and Meta to their own tools.** Tell the bot not to sign in to Google, Meta or X with these cookies. See below.
 
 The extension and the host never touch the network. The sync to your bot's computer is the bot's job and your decision. Found a way to make this leak? [SECURITY.md](SECURITY.md), not a public issue.
+
+## Final instruction for the agent: skip Google, Meta and X
+
+Do not use these cookies to sign in to a Google, Meta or X property. Gmail, Drive, Search Console, Google Ads, YouTube, Facebook, Instagram, WhatsApp, Meta Ads Manager, x.com.
+
+A cloud browser arriving on those accounts is exactly what their risk systems are built to catch. The cost is a security warning, a locked account or a disabled ad account, not a failed task.
+
+Use their own MCP servers, plugins or official APIs for those connections. They authenticate the way the account expects and they do the job better. It is the same rule the scraping crowd follows: steer clear of the big three.
+
+Everything else is fair game, and it is most of what you actually work in: Canva, the CRM, the help desk, Stripe, the invoicing tool, your product's admin dashboard, the project tracker.
 
 ## What is in here
 
@@ -113,7 +124,7 @@ register-mac-linux.sh            macOS and Linux: both steps in one run
 
 <h2>Now the harder question: what do you hand it?</h2>
 
-<p>A bot signed in as you is worth exactly the work you give it. The play book is eight prompts I run on my own accounts, each one written for a browser that is already logged in: the inbox cleared to drafts, rankings turned into a content plan, yesterday's ad spend put next to real revenue, every stalled deal swept and followed up, the support queue triaged angriest first.</p>
+<p>A bot signed in as you is worth exactly the work you give it. The play book is eight prompts I run on my own accounts, each one written for a browser that is already logged in: a week of Canva graphics built from the content doc, the signups who never finished onboarding chased by name, every SaaS subscription nobody opens put on a cancel list, every stalled deal in the CRM swept and followed up, the support queue triaged angriest first.</p>
 
 <p>Past that, the <strong>8 open source AI Employees</strong> run work like it on a schedule instead of on your say so. One folder of routines per business role, free on every plan, and this bridge is how they reach your accounts.</p>
 
@@ -149,6 +160,8 @@ You can also click the extension icon anytime for an immediate export.
 **Do I need this for an agent on my own PC?** No. It already has your browser.
 
 **Why is my bot still on a login page after sync?** Syncing the folder is not enough. The bot has to inject `cookies.json` into its Chrome (see `agent/inject-cookies.py`). Then reload the site.
+
+**Can my bot use it to log into Gmail, my ad account or Facebook?** Do not let it. Google, Meta and X treat a cloud browser arriving on your account as the thing their risk systems exist to catch, and the cost is a security warning, a locked account or a disabled ad account. Use their own MCP servers, plugins or official APIs for those, and keep the cookie bridge for everything else: Canva, the CRM, the help desk, Stripe, the invoicing tool, your own admin dashboard.
 
 **What happens when I sign out of a site?** The next export carries no session for it and your bot loses access at the next sync.
 
