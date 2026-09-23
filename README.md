@@ -3,10 +3,10 @@
 </p>
 
 <h3 align="center">Give your cloud bot the sites you are already signed into.</h3>
-<p align="center">A Chrome extension and a small native host. Local only. No password pasted anywhere.</p>
+<p align="center">A Chrome extension and a small native host. Local only. No password pasted anywhere.<br>Hand the folder to your bot and it installs itself.</p>
 
 <p align="center">
-  <a href="https://club.reinventing.ai/cookie-sync?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=nav-guide"><strong>The four step guide</strong></a>
+  <a href="https://club.reinventing.ai/cookie-sync?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=nav-guide"><strong>The setup and the plays</strong></a>
   &nbsp;&bull;&nbsp;
   <a href="https://club.reinventing.ai/ai-employees?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=nav-employees"><strong>8 AI Employees</strong></a>
   &nbsp;&bull;&nbsp;
@@ -32,7 +32,7 @@
 
 Grok Bot and Muse browse from a cloud computer of their own. Fresh browser, no sessions, signed out of everything you use, so the first piece of real work hits a login wall.
 
-This is the bridge. A Chrome extension reads the cookies of the sites you are signed into and hands them to a native host, which writes them to a folder on your own machine, every 15 minutes. Your bot syncs that folder and uses them in its browser. Setup is four steps, once.
+This is the bridge. A Chrome extension reads the cookies of the sites you are signed into and hands them to a native host, which writes them to a folder on your own machine, every 15 minutes. Your bot syncs that folder and uses them in its browser. Setup is one prompt to your bot, or four steps by hand.
 
 No password ever moves. Chrome holds a session cookie for every site you are signed into, and the cookie is what proves you are you. Your passwords stay in your password manager.
 
@@ -40,7 +40,19 @@ Built by [Mark Fulton](https://www.reinventing.ai/?utm_source=github&utm_medium=
 
 ## Install
 
-You need Chrome and Python 3. Clone or download this repository first.
+You need Chrome and Python 3.
+
+### The easy way: let your bot do it
+
+Download this repository (**Code**, **Download ZIP**) or clone it, extract it somewhere you will find again, then paste this to Grok Bot or Muse:
+
+```
+Please install and set up the Agent Cookie Sync I just extracted to my computer's Downloads folder.
+```
+
+That one prompt does the whole setup. It stops once, to have you load the extension in Chrome and hand over the extension ID, because that part only you can do.
+
+### By hand
 
 **Windows**
 
@@ -70,7 +82,7 @@ Last, tell your bot once:
 
 > Set a recurring sync every 15 minutes from that export folder to your computer, and use those cookies in your browser.
 
-The [four step guide](https://club.reinventing.ai/cookie-sync?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=guide) has the same steps with every click path, the prompts to paste, and the jobs worth handing over once it works.
+The [setup page](https://club.reinventing.ai/cookie-sync?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=guide) has the same four steps with every click path, free and with no account.
 
 ## Read this before you switch it on
 
@@ -95,11 +107,15 @@ register-mac-linux.sh          macOS and Linux: both steps in one run
 <table>
 <tr><td align="center" width="900">
 
-<h2>The same bots run 8 open source AI Employees</h2>
+<h2>Now the harder question: what do you hand it?</h2>
 
-<p>Each one is a folder of scheduled routines covering a whole business role, free on every plan. This bridge is how they reach your signed in accounts.</p>
+<p>A bot signed in as you is worth exactly the work you give it. The play book is eight prompts I run on my own accounts, each one written for a browser that is already logged in: the inbox cleared to drafts, rankings turned into a content plan, yesterday's ad spend put next to real revenue, every stalled deal swept and followed up, the support queue triaged angriest first.</p>
 
-<a href="https://club.reinventing.ai/?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=cta-club"><strong>Learn more about the Agent Ops Club</strong></a>
+<p>Past that, the <strong>8 open source AI Employees</strong> run work like it on a schedule instead of on your say so. One folder of routines per business role, free on every plan, and this bridge is how they reach your accounts.</p>
+
+<a href="https://club.reinventing.ai/cookie-sync?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=cta-plays#steps"><strong>Get the 8 plays</strong></a>
+&nbsp;&nbsp;&bull;&nbsp;&nbsp;
+<a href="https://club.reinventing.ai/ai-employees?utm_source=github&utm_medium=readme&utm_campaign=cookie-sync&utm_content=cta-employees"><strong>Meet the 8 AI Employees</strong></a>
 
 <p><sub><b>Free account, no card.</b></sub></p>
 
