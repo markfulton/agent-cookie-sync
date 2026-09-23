@@ -47,10 +47,10 @@ You need Chrome and Python 3.
 Download this repository (**Code**, **Download ZIP**) or clone it, extract it somewhere you will find again, then paste this to Grok Bot or Muse:
 
 ```
-Please install and set up the Agent Cookie Sync I just extracted to my computer's Downloads folder.
+Please install and set up the Agent Cookie Sync Chrome extension and native host I just extracted to my computer's Downloads folder. I'll give you the extension id, tell me where to find it. Then set a recurring sync every 15 minutes from the cookie export folder to your computer, and use those cookies in your browser.
 ```
 
-That one prompt does the whole setup. It stops once, to have you load the extension in Chrome and hand over the extension ID, because that part only you can do.
+That one prompt does the whole setup, the recurring sync included. It stops once, to walk you through loading the extension in Chrome and to take the extension ID from you, because that part only you can do.
 
 ### By hand
 
