@@ -6,6 +6,8 @@ This bridge hands your live browser sessions to a machine that is not yours. Tha
 
 **The file leaving your machine is your decision, not this code's.** The sync from that folder to your bot's computer is a job you ask your bot to run. This repository does not do it, does not know your bot, and holds no credential for it.
 
+**Browsing history is optional and stays local.** The "only sites used recently" rule needs Chrome's history permission. The extension asks for it once, when you first pick a window, reads it on your own computer to work out which sites are in use, and writes none of it anywhere. Leave the rule on "Any time" and the permission is never requested.
+
 **No password is read, written or moved.** The extension asks Chrome for cookies. It has no access to your password manager, and the native host never prints or logs a cookie value.
 
 ## What to report here

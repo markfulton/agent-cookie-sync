@@ -5,7 +5,7 @@ Chrome starts this program, sends one message (the cookie list) on stdin
 and reads one reply on stdout. It writes two files to the sync folder:
 
   cookies.json       the cookies, for your agent to pull
-  cookies.meta.json  when, how many, and a sample of the domains
+  cookies.meta.json  when, how many, which rules applied, a domain sample
 
 It never prints a cookie value and never touches the network.
 """
@@ -73,6 +73,8 @@ def main() -> int:
         "cookie_count": len(cookies),
         "source": "agent-cookie-sync",
         "reason": msg.get("reason"),
+        "total_in_chrome": msg.get("total_in_chrome"),
+        "filter": msg.get("filter"),
         "out_dir": out_dir,
         "domain_sample": domains[:25],
         "domain_count": len(domains),

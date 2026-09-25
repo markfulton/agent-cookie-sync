@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Cookie Sync settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <h1>Agent Cookie Sync</h1>
+        <p class="sub">Choose what your agent gets. Everything here stays on this computer.</p>
+      </div>
+      <span class="version" id="version"></span>
+    </header>
+
+    <section class="card status">
+      <div class="status-main">
+        <div class="status-line" id="status-line">Reading the last export…</div>
+        <div class="status-detail" id="status-detail"></div>
+      </div>
+      <div class="status-actions">
+        <button id="export-now" class="primary">Export now</button>
+        <span class="saved" id="saved" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="card preview" id="preview">
+      <strong id="preview-count">…</strong>
+      <span id="preview-text"></span>
+    </section>
+
+    <section class="card">
+      <h2>Which sites</h2>
+      <div class="choices" role="radiogroup" aria-label="Site rule">
+        <label class="choice"><input type="radio" name="mode" value="all"><span><b>Every site I am signed into</b><small>The whole cookie jar, minus anything switched off below.</small></span></label>
+        <label class="choice"><input type="radio" name="mode" value="include"><span><b>Only the sites I pick</b><small>Tick sites in the list. Nothing else leaves Chrome.</small></span></label>
+        <label class="choice"><input type="radio" name="mode" value="exclude"><span><b>Every site except the ones I pick</b><small>Tick the sites to hold back.</small></span></label>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="skip-big-three">
+        <span><b>Never export Google, Meta or X</b><small>Recommended. A cloud browser arriving on those accounts trips their risk systems. Use their own MCP servers, plugins or APIs instead.</small></span>
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>Only sites used recently</h2>
+      <div class="pills" id="recent-pills" role="radiogroup" aria-label="Recent window"></div>
+      <p class="hint" id="recent-hint">Chrome does not record when a cookie was created, so this reads your browsing history (asked for once, read locally) plus the cookie changes this extension has seen since it was installed.</p>
+    </section>
+
+    <section class="card">
+      <div class="list-head">
+        <h2 id="list-title">Sites</h2>
+        <div class="list-tools">
+          <input type="search" id="search" placeholder="Search sites" aria-label="Search sites">
+          <label class="mini"><input type="checkbox" id="signed-in-only"> Only sites that look signed in</label>
+          <button id="select-shown" class="ghost">Tick all shown</button>
+          <button id="clear-shown" class="ghost">Untick all shown</button>
+        </div>
+      </div>
+      <p class="hint" id="list-hint"></p>
+      <div class="list" id="list" role="list"></div>
+      <p class="hint" id="list-foot"></p>
+    </section>
+
+    <section class="card">
+      <h2>Timing</h2>
+      <div class="row">
+        <label for="every">Scheduled export every</label>
+        <select id="every"></select>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="instant">
+        <span><b>Instant sync</b><small>When a sign-in cookie changes on a site the rules allow, export within about a minute instead of waiting for the schedule. At most one of these every two minutes.</small></span>
+      </label>
+      <p class="hint">On demand at any time: click the toolbar icon, or run <code>Request-Sync.ps1</code> / <code>request-sync.sh</code>.</p>
+    </section>
+
+    <footer class="foot">
+      <span>Local only. No network calls. MIT.</span>
+      <a href="https://club.reinventing.ai/cookie-sync?utm_source=extension&utm_medium=options&utm_campaign=cookie-sync" target="_blank" rel="noopener">Setup guide and the 8 plays</a>
+    </footer>
+  </main>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

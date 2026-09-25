@@ -32,7 +32,7 @@
 
 Grok Bot and Muse browse from a cloud computer of their own. Fresh browser, no sessions, signed out of everything you use, so the first piece of real work hits a login wall.
 
-This is the bridge. A Chrome extension reads the cookies of the sites you are signed into and hands them to a native host, which writes them to a folder on your own machine, every 15 minutes (or on demand). Your bot syncs that folder, then injects the cookies into its own Chrome over DevTools Protocol so the window is actually signed in. Folder sync alone is not enough. Setup is one prompt to your bot, or a few steps by hand.
+This is the bridge. A Chrome extension reads the cookies of the sites you are signed into, only the sites you choose if you like, and hands them to a native host, which writes them to a folder on your own machine, every 15 minutes, the moment you sign in somewhere, or on demand. Your bot syncs that folder, then injects the cookies into its own Chrome over DevTools Protocol so the window is actually signed in. Folder sync alone is not enough. Setup is one prompt to your bot, or a few steps by hand.
 
 No password ever moves. Chrome holds a session cookie for every site you are signed into, and the cookie is what proves you are you. Your passwords stay in your password manager.
 
@@ -78,6 +78,8 @@ bash register-mac-linux.sh YOUR_EXTENSION_ID
 
 Reload the extension on `chrome://extensions`, then click its toolbar icon once. The badge turns into your cookie count and `cookies.json` lands in the sync folder: `%LOCALAPPDATA%\AgentCookieSync` on Windows, `~/.agentcookiesync` elsewhere.
 
+The settings page opens by itself the first time. Come back to it any time: right click the toolbar icon, **Options**.
+
 Last, tell your bot once:
 
 > Set a recurring sync every 15 minutes from that export folder to your computer, inject the cookies into your Chrome with agent/inject-cookies.py after each pull, and wire on-demand sync via Request-Sync.ps1 / request-sync.sh.
@@ -104,11 +106,25 @@ Use their own MCP servers, plugins or official APIs for those connections. They 
 
 Everything else is fair game, and it is most of what you actually work in: Canva, the CRM, the help desk, Stripe, the invoicing tool, your product's admin dashboard, the project tracker.
 
+## Choose what syncs
+
+Right click the toolbar icon, **Options**. Every change saves as you make it, and the page tells you what the next export will carry before you run it.
+
+**Which sites.** Three rules: every site you are signed into, only the sites you tick, or every site except the ones you tick. The list groups cookies by site, shows how many each holds and when you last used it, and has a search box and a switch for sites that look signed in. A separate switch, on by default, holds back Google, Meta and X no matter what else you pick.
+
+**Only sites used recently.** Today, the last 7, 30 or 90 days, or any time. Chrome does not record when a cookie was created, so this reads your browsing history (the extension asks for that permission once, when you first pick a window, and reads it on this computer only) plus the cookie changes it has seen since it was installed.
+
+**Timing.** The scheduled export runs every 15 minutes unless you change it. Instant sync, on by default, exports within about a minute of a sign-in cookie changing on a site your rules allow, so a fresh login reaches your bot on its next pull instead of up to 15 minutes later. At most one of those every two minutes.
+
+The rules that applied are written into `cookies.meta.json` under `filter`, so your bot can see what it was given.
+
 ## What is in here
 
 ```
-extension/manifest.json          Manifest V3, cookies + alarms + nativeMessaging
-extension/background.js          exports every 15 minutes, on click, and on demand
+extension/manifest.json          Manifest V3, cookies + alarms + nativeMessaging (history is optional)
+extension/background.js          exports on the schedule, on click, on demand, and on sign in
+extension/lib.js                 the site rules: which sites, how recent, never the big three
+extension/options.html, .css, .js  the settings page
 native-host/cookie_sync_host.py  writes the file; also answers poll_request
 Request-Sync.ps1                 Windows: drop sync-request.flag for a fresh export
 request-sync.sh                  macOS/Linux: same on-demand flag
@@ -162,6 +178,12 @@ You can also click the extension icon anytime for an immediate export.
 **Why is my bot still on a login page after sync?** Syncing the folder is not enough. The bot has to inject `cookies.json` into its Chrome (see `agent/inject-cookies.py`). Then reload the site.
 
 **Can my bot use it to log into Gmail, my ad account or Facebook?** Do not let it. Google, Meta and X treat a cloud browser arriving on your account as the thing their risk systems exist to catch, and the cost is a security warning, a locked account or a disabled ad account. Use their own MCP servers, plugins or official APIs for those, and keep the cookie bridge for everything else: Canva, the CRM, the help desk, Stripe, the invoicing tool, your own admin dashboard.
+
+**Can I sync only a few sites?** Yes. Options, then **Only the sites I pick**, tick them, done. The next export carries nothing else.
+
+**Can it sync only the sites I actually use?** Pick a window under **Only sites used recently**. It works from your browsing history and from cookie changes, because Chrome keeps no creation date on a cookie.
+
+**How fast does a new login reach my bot?** With instant sync on, the export runs within about a minute of the sign-in. Your bot has it on its next pull.
 
 **What happens when I sign out of a site?** The next export carries no session for it and your bot loses access at the next sync.
 
