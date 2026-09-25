@@ -1,8 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Agent Cookie Sync",
-  "version": "1.2.0",
-  "description": "Exports the Chrome cookies you choose for your agent. Local only. Pick sites, keep it to recent ones, sync the moment you sign in.",
+  "version": "1.2.1",
+  "description": "By Agent Ops Club. Exports the Chrome cookies you choose for your agent. Local only. Pick sites, keep it to recent ones, sync the moment you sign in.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
   "permissions": [
     "cookies",
     "alarms",
@@ -24,6 +30,12 @@
     "open_in_tab": true
   },
   "action": {
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
     "default_title": "Agent Cookie Sync: click to export now. Right click for Options."
   }
 }

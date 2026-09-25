@@ -124,7 +124,8 @@ The rules that applied are written into `cookies.meta.json` under `filter`, so y
 extension/manifest.json          Manifest V3, cookies + alarms + nativeMessaging (history is optional)
 extension/background.js          exports on the schedule, on click, on demand, and on sign in
 extension/lib.js                 the site rules: which sites, how recent, never the big three
-extension/options.html, .css, .js  the settings page
+extension/options.html, .css, .js  the settings page, on the club palette
+extension/icons/                 the Agent Ops Club icon at 16, 32, 48 and 128
 native-host/cookie_sync_host.py  writes the file; also answers poll_request
 Request-Sync.ps1                 Windows: drop sync-request.flag for a fresh export
 request-sync.sh                  macOS/Linux: same on-demand flag

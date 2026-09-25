@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1, 2026-09-25
+
+- On brand with the Agent Ops Club: the club icon in the toolbar and on chrome://extensions, the settings page on the club palette (deep navy, cream, signal blue), the club lockup in its header, and a next step card that points at the club and the free plays for a signed in bot.
+
 ## 1.2.0, 2026-09-25
 
 - Settings page (right click the icon, Options; opens by itself on first install). Every change saves as it is made and the page shows what the next export will carry.
